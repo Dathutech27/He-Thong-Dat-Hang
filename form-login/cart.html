@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" href="css/reset.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="cart.html">Giỏ hàng</a></li>
+                <li><a href="login.html">Đăng nhập</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Giỏ hàng của bạn</h1>
+        <div id="cart-items"></div>
+        <h3>Tổng tiền: <span id="total-price">0đ</span></h3>
+        <button class="checkout-btn" onclick="checkout()">Thanh toán</button>
+    </main>
+
+    <script>
+        // Danh sách sản phẩm với hình ảnh (sao chép từ index.html)
+        const allProducts = [
+            { name: "iPhone 14", price: 25000000, image: "https://tse1.mm.bing.net/th?id=OIP.86WXpNO4hlZwYe3qwTW5FAHaEK&pid=Api&P=0&h=220" },
+            { name: "MacBook Pro", price: 35000000, image: "https://sm.pcmag.com/pcmag_au/gallery/a/apple-macb/apple-macbook-pro-15-inch-2017_57va.jpg" },
+            { name: "AirPods Pro", price: 5500000, image: "https://www.zdnet.com/a/img/2022/09/21/a98e0665-133f-402e-8585-dec1d37743d8/9bd01eab-12e7-4d30-bce1-36d48b253c9a.jpg" },
+            { name: "Samsung Galaxy S23", price: 22000000, image: "https://www.allround-pc.com/wp-content/uploads/2022/09/Samsung-Galaxy-S23-Render-1-Digit.in_.jpg" },
+            { name: "Dell XPS 13", price: 30000000, image: "https://paidfreedroid.com/wp-content/uploads/2020/12/Dell-XPS-13-9310-scaled.jpg" },
+            { name: "Sony WH-1000XM5", price: 8000000, image: "https://nextrift.com/wp-content/uploads/2022/06/sony-wh-1000xm5-review-11.jpg" },
+            { name: "Apple Watch Series 8", price: 12000000, image: "https://t2.tudocdn.net/639257?w=1920" },
+            { name: "iPad Pro", price: 28000000, image: "https://9to5mac.com/wp-content/uploads/sites/6/2021/06/iPad-Pro-2021-Review.jpg?quality=82&strip=all" },
+            { name: "Logitech MX Master 3", price: 2500000, image: "https://demcrumbliesreviews.com/wp-content/uploads/2022/06/Logitech-MX-Master-3S-vs-MX-3.jpg" },
+            { name: "Samsung Galaxy Tab S9", price: 20000000, image: "https://static1.anpoimages.com/wordpress/wp-content/uploads/2023/08/samsung-galaxy-tab-s9-review-01.jpg" }
+        ];
+
+        // Hiển thị giỏ hàng
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsDiv = document.getElementById('cart-items');
+            const totalPriceSpan = document.getElementById('total-price');
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p>Chưa có sản phẩm nào.</p>';
+                totalPriceSpan.textContent = '0đ';
+                return;
+            }
+
+            let total = 0;
+            let table = `
+                <table>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Tổng</th>
+                        <th>Hành động</th>
+                    </tr>
+            `;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                // Tìm hình ảnh của sản phẩm dựa trên tên
+                const product = allProducts.find(product => product.name === item.name);
+                const imageUrl = product ? product.image : 'https://via.placeholder.com/50'; // Hình ảnh mặc định nếu không tìm thấy
+
+                table += `
+                    <tr>
+                        <td><img src="${imageUrl}" alt="${item.name}" class="cart-product-image"></td>
+                        <td>${item.name}</td>
+                        <td>${item.price}đ</td>
+                        <td>${item.quantity}</td>
+                        <td>${itemTotal}đ</td>
+                        <td><button onclick="removeFromCart(${index})">Xóa</button></td>
+                    </tr>
+                `;
+            });
+
+            table += '</table>';
+            cartItemsDiv.innerHTML = table;
+            totalPriceSpan.textContent = `${total}đ`;
+        }
+
+        // Xóa sản phẩm khỏi giỏ hàng
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // Thanh toán
+        function checkout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Giỏ hàng trống! Vui lòng thêm sản phẩm trước khi thanh toán.');
+                return;
+            }
+            alert('Thanh toán thành công! Cảm ơn bạn đã mua hàng.');
+            localStorage.removeItem('cart'); // Xóa giỏ hàng sau khi thanh toán
+            displayCart();
+        }
+
+        // Hiển thị giỏ hàng khi trang được tải
+        window.onload = displayCart;
+    </script>
+</body>
+</html>
