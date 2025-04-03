@@ -110,14 +110,17 @@ main {
     margin-bottom: 20px;
     letter-spacing: 3px;
     background: linear-gradient(90deg, #54a0ff, #2980b9);
+    -webkit-background-clip: text; /* Thêm thuộc tính để áp dụng gradient lên văn bản */
+    background-clip: text; /* Thuộc tính chuẩn cho các trình duyệt hiện đại */
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Giảm độ đậm của bóng để chữ rõ hơn */
     animation: fadeInDown 1s ease-in-out;
 }
 
 #home p {
     font-size: 22px;
     margin-bottom: 30px;
+    color: #fff; /* Đảm bảo chữ trắng để dễ đọc trên nền tối */
     opacity: 0.9;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 1s ease-in-out 0.3s;
