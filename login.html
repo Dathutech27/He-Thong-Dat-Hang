@@ -6,6 +6,19 @@
     <title>Hệ thống đặt hàng trực tuyến</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <style>
+        /* Thêm CSS để đảm bảo thông báo hiển thị rõ ràng */
+        #message {
+            color: #00ff00; /* Màu xanh lá cho thông báo thành công */
+            text-align: center;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #message.error {
+            color: #ff0000; /* Màu đỏ cho thông báo lỗi */
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -34,6 +47,7 @@
                     <i class="far fa-eye"></i>
                 </div>
             </div>
+            <p id="message"></p>
             <input type="submit" value="Đăng nhập" class="form-submit">
             <p>Bạn chưa có tài khoản? <a href="register.html" class="register-link">Đăng ký</a></p>
         </form>
@@ -49,9 +63,18 @@
 
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
+        const messageElement = document.getElementById("message");
 
         const result = validateLoginInput(username, password);
         alert(result);
+
+        // Hiển thị thông báo trên giao diện
+        messageElement.textContent = result;
+            if (result === "Đăng nhập thành công") {
+                messageElement.classList.remove("error");
+            } else {
+                messageElement.classList.add("error");
+            }
 
         if (result === "Đăng nhập thành công") {
             setTimeout(() => {
